@@ -98,26 +98,23 @@ Tally the total overall disbursement amounts for each month (distinguishing betw
 
 payments %>% 
   group_by(disbursement_month, disbursement_year) %>% 
-  summarise(totalspent = sum(disbursement_amount)) %>% arrange(desc(totalspent))
+  summarise(totalspent = sum(disbursement_amount)) %>% arrange(desc(totalspent)) 
 
 ## in October 2018 the spending was the highest
 ## i first grouped by the month and year (being 2017 and 2018) then found the total amout spent and used the arrange(desc) command to order them highest to lowest
-
-
-
-
 
 ```
 
 Which recipient (recipient_name) was paid the most in the 2020 election cycle?
 
 ```{r}
+payments %>% 
+  group_by(recipient_name) %>% 
+  filter(election_cycle == 2020) %>% 
+  summarise(totalrec = sum(disbursement_amount)) %>% 
+  arrange(desc(totalrec)) %>% top_n(1)
 
-
-
-
-
-
+## i filtered by the 2020 election cycle and summarised for the total amount received in ascending order 
 
 ```
 
@@ -125,21 +122,26 @@ Look at what this recipient was paid for. What service or good (see the "disburs
 
 ```{r}
 
+payments %>% 
+  filter(recipient_name == "AMERICAN MADE MEDIA CONSULTANTS, LLC") %>% 
+  group_by(disbursement_description) %>% 
+  summarise(total = sum(disbursement_amount)) %>% 
+  arrange(desc(total))
 
-
-
-
+# i filtered recipient for the recipient that recieved the most amount in 2020. Then I grouped by description and summed the disbursement amount for each description and arranged in descending order.
 
 ```
 
 What's the most common category overall (see "disbursement_description") the campaign spent money on?
 
 ```{r}
+### fix this ###
+payments %>% 
+  group_by(disbursement_description) %>% 
+  summarise(count = n()) %>% 
+  arrange(desc(count))
 
-
-
-
-
+## the campaign spent the most common categroy was merchant fees
 
 ```
 
@@ -147,12 +149,13 @@ Who were the 5 biggest recipients of campaign spending on "LEGAL CONSULTING"..?
 
 ```{r}
 
+payments %>% 
+  group_by(recipient_name) %>% 
+  filter(disbursement_description == "LEGAL CONSULTING") %>% 
+  summarise(total = sum(disbursement_amount)) %>% 
+  arrange(desc(total)) %>% top_n(5)
 
-
-
-
-
-
+## i used the code from above but filtered only for this recipient. then i arranged using the function top_n which i found from the tidyverse encyclopedia online
 ```
 
 
@@ -160,10 +163,13 @@ Who are the top 5 individuals (vs. organization) were paid by the campaign commi
 
 ```{r}
 
+payments %>% 
+  group_by(recipient_name) %>% 
+  filter(entity_type == "IND") %>% 
+  summarise(total = sum(disbursement_amount)) %>% 
+  arrange(desc(total)) %>% top_n(5)
 
-
-
-
+## i used the same code as above but filtered for the entity type of individuals
 
 
 ```
@@ -173,9 +179,13 @@ For the indvidual who was paid the most, which payment category (disbursement_de
 
 ```{r}
 
+payments %>% 
+  group_by(disbursement_description) %>% 
+  filter(recipient_name == "GLASSNER, MICHAEL") %>% 
+  summarize(total = sum(disbursement_amount)) %>% arrange(desc(total)) %>% top_n(1)
+  
 
-
-
+## i filtered for michael and found the total amount he was paid, i arranged for only the top amount through the command top_n(1)
 
 
 
