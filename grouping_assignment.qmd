@@ -61,11 +61,11 @@ Take a moment to look at the various categories included for each disbursement.
 
 Without doing any analysis yet, what are three questions you might try to answer using this dataset? Write your narrative answers in the spaces below.
 
-1.  
+1.  In what year did the campaign make the most contributions?
 
-2.  
+2.  What entity type did they contribute the most to - individual or organization?
 
-3.  
+3.  What state recieved the greatest contributions on average?
 
 ## Coding Assignment Questions
 
@@ -81,8 +81,11 @@ How much was spent in the 2017 vs. 2018 reporting year?
 
 ```{r}
 
+payments %>% 
+  group_by(disbursement_year) %>% 
+  summarise(totalspent = sum(disbursement_amount)) 
 
-
+## since there is only 2017 and 2018 data i grouped by the code for disbursement year and found the sum total for amount spent
 
 
 
@@ -93,6 +96,12 @@ Tally the total overall disbursement amounts for each month (distinguishing betw
 
 ```{r}
 
+payments %>% 
+  group_by(disbursement_month, disbursement_year) %>% 
+  summarise(totalspent = sum(disbursement_amount)) %>% arrange(desc(totalspent))
+
+## in October 2018 the spending was the highest
+## i first grouped by the month and year (being 2017 and 2018) then found the total amout spent and used the arrange(desc) command to order them highest to lowest
 
 
 
